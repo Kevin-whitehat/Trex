@@ -1,40 +1,48 @@
-var box;
+var trex, trex_running, edges;
+var groundImage;
+var ground;
+
+function preload() {
+  trex_running = loadAnimation("trex1.png", "trex3.png", "trex4.png");
+  groundImage = loadImage("ground2.png")
+}
 
 function setup() {
-  createCanvas(400,400);
-  box = createSprite(200,200,30,30);
+  createCanvas(600, 200);
 
+  // creating trex
+  trex = createSprite(50, 160, 20, 50);
+  trex.addAnimation("running", trex_running);
+  edges = createEdgeSprites();
+
+  //adding scale and position to trex
+  trex.scale = 0.5;
+  trex.x = 50
+
+  ground = createSprite(300, 180)
+  ground.addImage("ground", groundImage);
 }
 
-function draw() 
-{
-   background(30);
 
-  if (keyIsDown(RIGHT_ARROW)) 
-  {
-    box.position.x = box.position.x +5;
+function draw() {
+  if (ground.x <= 0) {
+    ground.x = ground.width / 2
+  }
+  ground.velocityX = -2
+  //set background color 
+  background("white");
+
+  //logging the y position of the trex
+  console.log(ground.x)
+
+  //jump when space key is pressed
+  if (keyDown("space")) {
+    trex.velocityY = -10;
   }
 
-    if (keyIsDown(LEFT_ARROW)) 
-  {
-    box.position.x= box.position.x -5;
-    
-  }
- 
-    if (keyIsDown(UP_ARROW)) 
-  {
-    box.position.y = box.position.y - 5;
-   
-  }
+  trex.velocityY = trex.velocityY + 0.5;
 
-  if (keyIsDown(DOWN_ARROW)) 
-  {
-    box.position.y = box.position.y + 5;
-  }
-
+  //stop trex from falling down
+  trex.collide(ground)
   drawSprites();
 }
-
-
-
-
